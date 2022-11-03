@@ -9,18 +9,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-options.SwaggerDoc("v1", new OpenApiInfo
-{
-Title =" Mingle Api",
-Version ="v1",
-Description ="MIngle Api is a dating software  application.",
-Contact =new OpenApiContact
-{
-Name ="Edeh Victor",
-Email ="Edehvictor715@gmail.com"
-}
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = " Mingle Api",
+        Version = "v1",
+        Description = "MIngle Api is a dating software  application.",
+        Contact = new OpenApiContact
+        {
+            Name = "Edeh Victor",
+            Email = "Edehvictor715@gmail.com"
+        }
+    });
 });
-});
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<MingleDbContext>(options =>options.useMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
 
@@ -28,7 +30,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json","Mingle Api Doc v1"));
+    app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Mingle Api Doc v1"));
 }
 
 app.UseHttpsRedirection();
