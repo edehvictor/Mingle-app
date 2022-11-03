@@ -25,11 +25,12 @@ namespace API.Data
 
             builder.Entity<AppRole>()
                    .HasMany(ur => ur.UserRoles)
-                   .WithOne(ur => ur.Rolesssss)
+                   .WithOne(ur => ur.Role)
                    .HasForeignKey(ur => ur.RoleId)
                    .IsRequired();
 
         }
     }
+    
 
 }
