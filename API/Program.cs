@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "MIngle Api is a dating software  application.",
         Contact = new OpenApiContact
         {
-            Name = "Edeh Victor",
+            Name = "Victor Edeh",
             Email = "Edehvictor715@gmail.com"
         }
     });
@@ -53,4 +53,13 @@ app.UseAuthentication();
 
 app.MapControllers();
 
-app.Run();
+//Using keyword disposes this sevice scope after use 
+using var scope =app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+var userManager =services.GetRequiredService<UserManager<AppUser>>();
+var roleManager =services.GetRequiredService<RoleManager<AppRole>>();
+
+await SeedData.SeedUsersAsync(userManager, roleManager);
+
+await app.RunAsync();
