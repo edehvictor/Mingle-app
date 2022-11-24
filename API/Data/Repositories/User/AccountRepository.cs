@@ -1,5 +1,6 @@
 using API.DTOs.Users;
 using API.Entities;
+using API.Interfaces.Services;
 using API.Interfaces.Users;
 using AutoMapper;
 using ErrorOr;
@@ -12,11 +13,13 @@ namespace API.Data.Repositories.User
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly ITokenServices _tokenServices;
 
-        public AccountRepository(UserManager<AppUser> userManager, IMapper mapper)
+        public AccountRepository(UserManager<AppUser> userManager, IMapper mapper, ITokenServices tokenServices)
         {
             _userManager = userManager;
-            _mapper =mapper;
+            _mapper = mapper;
+            _tokenServices = tokenServices;
         }
 
         public async Task<ErrorOr<LoginDto>> RegisterAsync(RegisterRequest request)
@@ -52,7 +55,8 @@ namespace API.Data.Repositories.User
             {
                 Username =user.UserName!,
                 Gender =user.Gender,
-                Fullname = user.Fullname
+                Fullname = user.Fullname,
+                Token = await _tokenServices.GenerateAccessTokenAsync(user)
             };
         }
 

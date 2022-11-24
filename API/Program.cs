@@ -1,7 +1,10 @@
 using API.Data;
 using API.Data.Repositories.User;
 using API.Entities;
+using API.Extensions;
+using API.Interfaces.Services;
 using API.Interfaces.Users;
+using API.Services;
 using API.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ITokenServices, TokenServices>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
@@ -34,12 +38,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 //identity
-builder.Services.AddIdentityCore<AppUser>(options => options.User.RequireUniqueEmail =true)
-.AddRoles<AppRole>()
-.AddRoleManager<RoleManager<AppRole>>()
-.AddSignInManager<SignInManager<AppUser>>()
-.AddRoleValidator<RoleValidator<AppRole>>()
-.AddEntityFrameworkStores<MingleDbContext>();
+builder.Services.AddIdentityServices(builder.Configuration);
 
 
 builder.Services.AddAuthentication();
