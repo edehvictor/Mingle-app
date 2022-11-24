@@ -43,6 +43,7 @@ namespace API.Data.Repositories.User
 
             var userDots = await query
             .AsNoTracking().Select(a =>new UserDto{
+                Username =a.UserName,
                 Fullname =a.Fullname,
                 MainPhoto =a.Photos!.FirstOrDefault(p => p.IsMain)!.Url,
                 Gender =a.Gender,
